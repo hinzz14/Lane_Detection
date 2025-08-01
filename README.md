@@ -88,4 +88,50 @@ Từ tọa độ các làn đường, tạo ra 2 loại ảnh nhãn:
 - Ảnh đầu vào được chuyển sang ảnh **grayscale**
 - Tất cả ảnh đầu vào và nhãn được resize về kích thước **`512x256` pixels** để đưa vào mô hình
 
+## 3. Huấn luyện Mô hình
+
+### 3.1 Cấu hình Huấn luyện
+
+Các tham số huấn luyện được thiết lập trong `train.py` và tham khảo từ paper gốc:
+
+| Tham số             | Cài đặt                      |
+|---------------------|------------------------------|
+| Mô hình             | ENet (2 nhánh)               |
+| Kích thước ảnh      | 512×256                      |
+| Kích thước nhúng    | 4                            |
+| Optimizer           | Adam                         |
+| Learning Rate       | 5e-4                         |
+| Batch Size          | 4 *(do giới hạn phần cứng)*  |
+| Số Epochs           | 20                           |
+| Tỷ lệ Train/Val     | 80% / 20%                    |
+| Loss Function       | CrossEntropyLoss + DiscriminativeLoss |
+
+---
+
+### 3.2 Quy trình Huấn luyện
+
+Quy trình huấn luyện mô hình diễn ra trong **20 epochs**, với 2 pha chính trong mỗi epoch:
+
+#### 🔹 Pha Training
+
+- Mô hình học trên tập **train**
+- Mỗi batch sẽ được đưa vào mô hình
+- Tính **loss tổng hợp** từ hai nhánh: segmentation và embedding
+- **Lan truyền ngược (backpropagation)** để cập nhật trọng số thông qua optimizer **Adam**
+
+#### 🔹 Pha Validation
+
+- Sau mỗi epoch, mô hình được đánh giá trên tập **validation**
+- Ghi lại các chỉ số như:
+  - **Validation Loss**
+  - **Accuracy**
+  - **IoU (Intersection over Union)**
+- Mục tiêu: Theo dõi hiệu năng và phát hiện hiện tượng **overfitting**
+
+#### 🔹 Learning Rate Scheduling
+
+- Sử dụng `ReduceLROnPlateau`
+- Tự động giảm `learning rate` nếu **validation loss không cải thiện** sau một số epoch nhất định
+
+
 
