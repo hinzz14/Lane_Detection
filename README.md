@@ -137,8 +137,8 @@ Mô hình được huấn luyện trong **20 epochs**, và hiệu năng được
 
 ---
 > `![test1](/test_result/1.png)
-> `![test1](/test_result/2.png)
-> `![test1](/test_result/3.png)
+> `![test2](/test_result/2.png)
+> `![test3](/test_result/3.png)
 
 
 
