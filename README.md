@@ -24,12 +24,6 @@ LaneNet giải quyết bài toán phát hiện làn đường bằng cách chia 
 - **Nguyên tắc:**  
   - Pixel thuộc **cùng một làn đường** → vector embedding gần nhau.  
   - Pixel thuộc **làn đường khác nhau** → vector embedding cách xa nhau.  
-- **Hàm mất mát:** `Discriminative Loss`, gồm:
-  - **Variance Loss (L_var):** Kéo các embedding cùng làn đường lại gần tâm cụm.
-  - **Distance Loss (L_dist):** Đẩy tâm của các cụm làn đường ra xa nhau.
-- **Tham số sử dụng:**
-  - `δv = 0.5`
-  - `δd = 3.0`
 
 ---
 
