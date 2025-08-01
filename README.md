@@ -43,4 +43,55 @@ Sau khi mô hình sinh ra hai đầu ra từ hai nhánh, cần một bước h�
 
 - **So sánh với paper gốc:**  
   Trong bài báo gốc của LaneNet, một mạng neuron thứ hai là **H-Net** được sử dụng để học phép biến đổi phối cảnh và khớp các pixel thành đường cong bậc 3 (3rd-order polynomial fit).
+## 2. Dữ liệu và Tiền xử lý
+
+### 2.1 Bộ dữ liệu TuSimple
+
+Dự án sử dụng bộ dữ liệu từ **TuSimple Lane Detection Challenge**.
+
+- **Quy mô:**  
+  - Tổng cộng: `3626` video clip  
+  - Mỗi clip có 20 khung hình tuần tự  
+  - Chỉ khung hình cuối (frame thứ 20) được gán nhãn
+
+- **Cấu trúc thư mục:**  
+  - Thư mục `clips/`: Chứa các khung hình video  
+  - File `label_data_*.json`: Chứa thông tin nhãn cho ảnh
+
+- **Định dạng nhãn (JSON):** Mỗi dòng tương ứng với một ảnh, gồm:
+  - `raw_file`: Đường dẫn tới file ảnh
+  - `lanes`: Danh sách các tọa độ `x` của các điểm trên làn đường
+  - `h_samples`: Danh sách các tọa độ `y` tương ứng với các điểm trong `lanes`
+  - **Lưu ý:** Nếu giá trị `x = -2` thì tại `y` tương ứng không có điểm nào trên làn đường
+
+---
+
+### 2.2 Quy trình Tiền xử lý
+
+Quy trình tiền xử lý được thực hiện trong lớp `LaneDataset`. Gồm các bước sau:
+
+#### 🔹 Đọc và xử lý nhãn
+
+- Đọc các file JSON
+- Kết hợp `lanes` và `h_samples` để tạo danh sách tọa độ `(x, y)` cho từng làn đường
+- Bỏ qua các điểm không hợp lệ (có `x = -2`)
+
+#### 🔹 Tạo ảnh nhãn (Ground Truth)
+
+Từ tọa độ các làn đường, tạo ra 2 loại ảnh nhãn:
+
+- **Ảnh phân vùng nhị phân:**  
+  - Vẽ tất cả các làn đường lên ảnh đen  
+  - Gán cùng một giá trị (thường là `1`)  
+  - Dùng cho nhánh **segmentation**
+
+- **Ảnh phân vùng thực thể (instance):**  
+  - Mỗi làn đường được gán một nhãn riêng biệt (`1, 2, 3,...`)  
+  - Dùng cho nhánh **embedding**
+
+#### 🔹 Biến đổi ảnh
+
+- Ảnh đầu vào được chuyển sang ảnh **grayscale**
+- Tất cả ảnh đầu vào và nhãn được resize về kích thước **`512x256` pixels** để đưa vào mô hình
+
 
