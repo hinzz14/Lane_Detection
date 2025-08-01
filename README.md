@@ -12,14 +12,13 @@ LaneNet giải quyết bài toán phát hiện làn đường bằng cách chia 
 
 #### 🔹 Nhánh Phân vùng Nhị phân (Binary Segmentation Branch)
 
-- **Nhiệm vụ:** Trả lời câu hỏi *"Pixel này có thuộc về một làn đường hay không?"*  
+- **Nhiệm vụ:** xác định pixel có thuộc làn đường hay không
 - **Bản chất:** Bài toán phân loại mỗi pixel thành hai lớp: `lane` và `background`.  
 - **Đầu ra:** Một bản đồ phân vùng (segmentation map) nơi các pixel thuộc làn đường được đánh dấu.  
-- **Hàm mất mát:** `CrossEntropyLoss` được sử dụng để đo lường sai khác giữa dự đoán và nhãn thật.
 
 #### 🔹 Nhánh Nhúng Đặc trưng (Instance Embedding Branch)
 
-- **Nhiệm vụ:** Trả lời câu hỏi *"Pixel này thuộc về làn đường cụ thể nào?"*  
+- **Nhiệm vụ:** xác định pixel thuộc làn đường nào
 - **Cách hoạt động:** Nhánh này học cách ánh xạ mỗi pixel vào một không gian đặc trưng nhiều chiều (embedding space).  
 - **Nguyên tắc:**  
   - Pixel thuộc **cùng một làn đường** → vector embedding gần nhau.  
@@ -40,8 +39,6 @@ Sau khi mô hình sinh ra hai đầu ra từ hai nhánh, cần một bước h�
 ## 2. Dữ liệu và Tiền xử lý
 
 ### 2.1 Bộ dữ liệu TuSimple
-
-Dự án sử dụng bộ dữ liệu từ **TuSimple Lane Detection Challenge**.
 
 - **Quy mô:**  
   - Tổng cộng: `3626` video clip  
