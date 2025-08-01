@@ -136,8 +136,7 @@ Mô hình được huấn luyện trong **20 epochs**, và hiệu năng được
 - Các đường cong validation tiếp tục **bám sát train**, cho thấy mô hình **tổng quát hóa tốt**.
 
 ---
-
-✅ Nhìn chung, quá trình huấn luyện cho thấy mô hình không chỉ học nhanh, mà còn có khả năng tổng quát hóa tốt trên tập dữ liệu mới — điều rất quan trọng với bài toán phát hiện làn đường thực tế.
+> `![test1](/test_result/1.png)
 
 
 
