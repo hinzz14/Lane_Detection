@@ -107,25 +107,7 @@ Các tham số huấn luyện được thiết lập trong `train.py` và tham k
 
 ---
 
-## 4. Kết quả và Đánh giá
-
-### 4.1 Các chỉ số đánh giá
-
-Hiệu năng của mô hình được đánh giá dựa trên các chỉ số tính toán trên tập **validation**:
-
-- **Accuracy:**  
-  Tỷ lệ phần trăm các pixel được phân loại đúng (lane / background).
-
-- **IoU (Intersection over Union):**  
-  Tỷ lệ giữa diện tích giao và diện tích hợp giữa vùng dự đoán và vùng thực tế.  
-  Đây là **chỉ số quan trọng nhất** trong bài toán phân vùng làn đường.
-
-- **Precision, Recall, F1-Score:**  
-  Các chỉ số đánh giá chất lượng phát hiện pixel thuộc về làn đường.
-
----
-
-### 4.2 Kết quả quá trình huấn luyện
+## 4. Kết quả 
 
 Mô hình được huấn luyện trong **20 epochs**, và hiệu năng được trực quan hóa qua các biểu đồ thể hiện sự thay đổi của:
 
@@ -135,7 +117,6 @@ Mô hình được huấn luyện trong **20 epochs**, và hiệu năng được
 
 #### 📈 Biểu đồ huấn luyện:
 
-> (Bạn có thể thêm hình ảnh ví dụ tại đây, ví dụ: 
 > `![Training Curves](training_history.png)
 
 ---
