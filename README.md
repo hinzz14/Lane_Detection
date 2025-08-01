@@ -90,7 +90,7 @@ Từ tọa độ các làn đường, tạo ra 2 loại ảnh nhãn:
 
 ## 3. Huấn luyện Mô hình
 
-### 3.1 Cấu hình Huấn luyện
+### Cấu hình Huấn luyện
 
 Các tham số huấn luyện được thiết lập trong `train.py` và tham khảo từ paper gốc:
 
@@ -102,36 +102,61 @@ Các tham số huấn luyện được thiết lập trong `train.py` và tham k
 | Optimizer           | Adam                         |
 | Learning Rate       | 5e-4                         |
 | Batch Size          | 4 *(do giới hạn phần cứng)*  |
-| Số Epochs           | 20                           |
 | Tỷ lệ Train/Val     | 80% / 20%                    |
 | Loss Function       | CrossEntropyLoss + DiscriminativeLoss |
 
 ---
 
-### 3.2 Quy trình Huấn luyện
+## 4. Kết quả và Đánh giá
 
-Quy trình huấn luyện mô hình diễn ra trong **20 epochs**, với 2 pha chính trong mỗi epoch:
+### 4.1 Các chỉ số đánh giá
 
-#### 🔹 Pha Training
+Hiệu năng của mô hình được đánh giá dựa trên các chỉ số tính toán trên tập **validation**:
 
-- Mô hình học trên tập **train**
-- Mỗi batch sẽ được đưa vào mô hình
-- Tính **loss tổng hợp** từ hai nhánh: segmentation và embedding
-- **Lan truyền ngược (backpropagation)** để cập nhật trọng số thông qua optimizer **Adam**
+- **Accuracy:**  
+  Tỷ lệ phần trăm các pixel được phân loại đúng (lane / background).
 
-#### 🔹 Pha Validation
+- **IoU (Intersection over Union):**  
+  Tỷ lệ giữa diện tích giao và diện tích hợp giữa vùng dự đoán và vùng thực tế.  
+  Đây là **chỉ số quan trọng nhất** trong bài toán phân vùng làn đường.
 
-- Sau mỗi epoch, mô hình được đánh giá trên tập **validation**
-- Ghi lại các chỉ số như:
-  - **Validation Loss**
-  - **Accuracy**
-  - **IoU (Intersection over Union)**
-- Mục tiêu: Theo dõi hiệu năng và phát hiện hiện tượng **overfitting**
+- **Precision, Recall, F1-Score:**  
+  Các chỉ số đánh giá chất lượng phát hiện pixel thuộc về làn đường.
 
-#### 🔹 Learning Rate Scheduling
+---
 
-- Sử dụng `ReduceLROnPlateau`
-- Tự động giảm `learning rate` nếu **validation loss không cải thiện** sau một số epoch nhất định
+### 4.2 Kết quả quá trình huấn luyện
+
+Mô hình được huấn luyện trong **20 epochs**, và hiệu năng được trực quan hóa qua các biểu đồ thể hiện sự thay đổi của:
+
+- Loss (Train / Validation)  
+- Accuracy (Train / Validation)  
+- IoU (Train / Validation)
+
+#### 📈 Biểu đồ huấn luyện:
+
+> (Bạn có thể thêm hình ảnh ví dụ tại đây, ví dụ: 
+> `![Training Curves](training_history.png)
+
+---
+
+#### 🔍 Phân tích:
+
+##### ▸ **Hàm mất mát (Loss)**
+
+- Cả `train loss` và `validation loss` đều giảm rõ rệt và hội tụ tốt sau 20 epochs.
+- Trong 5 epochs đầu, loss giảm rất mạnh → mô hình học được nhanh chóng các đặc trưng cơ bản.
+- Đường `validation loss` bám sát `train loss` → **không có hiện tượng overfitting** rõ ràng.
+
+##### ▸ **Độ chính xác (Accuracy) và IoU**
+
+- Accuracy tăng vọt trong 2–3 epochs đầu tiên, sau đó tiếp tục cải thiện ổn định.
+- IoU có bước **nhảy mạnh từ epoch 6 đến 10**, từ khoảng `0.1` lên gần `0.5`, thể hiện mô hình bắt đầu học được các đặc trưng cốt lõi để phân biệt làn đường.
+- Các đường cong validation tiếp tục **bám sát train**, cho thấy mô hình **tổng quát hóa tốt**.
+
+---
+
+✅ Nhìn chung, quá trình huấn luyện cho thấy mô hình không chỉ học nhanh, mà còn có khả năng tổng quát hóa tốt trên tập dữ liệu mới — điều rất quan trọng với bài toán phát hiện làn đường thực tế.
 
 
 
